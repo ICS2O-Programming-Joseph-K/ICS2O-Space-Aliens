@@ -20,6 +20,9 @@ class GameScene extends Phaser.Scene {
 
     // Variable for sprite (spaceship)
     this.ship = null
+
+    // Variable to let user only fire a missile one at a time
+    this.fireMissile = false 
   }
 
   // Initialize, gets the scene up and running
@@ -38,6 +41,7 @@ class GameScene extends Phaser.Scene {
     // Load in the images
     this.load.image('starBackground', 'assets/starBackground.png')
     this.load.image('ship', 'assets/spaceShip.png')
+    this.load.image("missile", 'assets/missile.png')
   }
 
   /**
@@ -53,6 +57,9 @@ class GameScene extends Phaser.Scene {
 
     // Property/module called physics for the movement of spaceship (helps with collision detection)
     this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship')
+
+    // create a group for the missiles
+    this.missileGroup = this.physics.add.group()
   }
 
   /**
@@ -67,6 +74,8 @@ class GameScene extends Phaser.Scene {
     const keyLeftObj = this.input.keyboard.addKey('LEFT')
     // create a variable in this local function | Right hand key
     const keyRightObj = this.input.keyboard.addKey('RIGHT')
+    // create a variable in this local function | Space bar
+    const keySpaceObj = this.input.keyboard.addKey('SPACE')
 
     
     // If statement for movement | LEFT KEY
@@ -89,7 +98,22 @@ class GameScene extends Phaser.Scene {
         this.ship.x = 1920
       }
     }
-   // pass
+
+    // if statement for space bar object | missiles
+    if (keySpaceObj.isDown === true) {
+      // Only create the new one of fileMissile is false
+      if (this.fireMissile === false) {
+        // create a variable for missile 
+        this.fireMissile = true
+        const aNewMissile = this.physics.add.sprite(this.ship.x, this.ship.y, 'missile')
+        // add it to the group 
+        this.missileGroup.add(aNewMissile)
+      }
+    }
+    // an if statement for when the sapce bar is up
+    if (keySpaceObj.isUp === true ) {
+      this.fireMissile = false 
+    }
   }
 }
 
