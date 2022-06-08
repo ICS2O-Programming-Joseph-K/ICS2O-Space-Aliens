@@ -16,22 +16,27 @@ import TitleScene from './titleScene.js'
 // import in the js file using the import statement "MenuScene"
 import MenuScene from './menuScene.js'
 
+// import in the js file using the import statement "MenuScene"
+import GameScene from './gameScene.js'
+
 // Our game scenes
 // Any files added into slpashScene.js will exist inside "splashScene" variable
 const splashScene = new SplashScene()
 const titleScene = new TitleScene()
 const menuScene = new MenuScene()
+const gameScene = new GameScene()
 
 
 /* Game scene */
 const config = {
   type: Phaser.AUTO,
+  // Dimensions of the game
   width: 1920, 
   height: 1080,
   physics: {
     default: 'arcade',
     arcade: {
-      // creates bounding boxes
+      // creates bounding boxes (collision boxes that sends messages to physics module/property | false = invisible)
       debug: true,
     },
   },
@@ -53,6 +58,7 @@ const game = new Phaser.Game(config)
 game.scene.add("splashScene", splashScene)
 game.scene.add("titleScene", titleScene)
 game.scene.add("menuScene", menuScene)
+game.scene.add("gameScene", gameScene)
 
 
 // start title - game starts at splashScene

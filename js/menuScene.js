@@ -14,6 +14,11 @@ class MenuScene extends Phaser.Scene {
   constructor () {
     // run phaser's constructor code first, (super's role)
     super({ key: "menuScene" })
+
+    // variable that can hold the image for the background
+    this.menuSceneBackgroundImage = null
+    // Creating a button | similar to adding in an image
+    this.startButton = null
   }
 
   // Initialize, gets the scene up and running
@@ -28,6 +33,10 @@ class MenuScene extends Phaser.Scene {
   */
   preload() {
     console.log('Menu Scene')
+    // Load the image
+    this.load.image('menuSceneBackground', 'assets/aliens_screen_image2.jpg')
+    // Load in the image that is going to be the button
+    this.load.image('startButton', 'assets/start.png')
   }
 
   /**
@@ -36,6 +45,17 @@ class MenuScene extends Phaser.Scene {
   * @param {object} data - Any data passed via ScenePlugin.add() or ScenePlugin.start().
   */
   create(data) {
+    // grab the image from assets and center it on screen
+    this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackground')
+    this.menuSceneBackgroundImage.x = 1920 / 2
+    this.menuSceneBackgroundImage.y = 1080 / 2
+
+    // Add the start button as a sprite, center slightly below 100 pixels
+    this.startButton = this.add.sprite(1920 / 2, (1080 / 2) + 100, 'startButton')
+    // Making the button interactive
+    this.startButton.setInteractive({ useHandCursor: true })
+    // When the person clicks button (pointerdown) ---> function call to happen
+    this.startButton.on('pointerdown', () => this.clickButton())
   }
 
   /**
@@ -46,6 +66,12 @@ class MenuScene extends Phaser.Scene {
   */
   update(time, delta) {
    // pass
+  }
+
+  // code for the clickButton function
+  clickButton () {
+    // brings user to gameScene on click
+    this.scene.start('gameScene')
   }
 }
 
