@@ -8,6 +8,23 @@
 
 // Expand this particular scene using the code of another user
 class GameScene extends Phaser.Scene {
+
+  // ceate an alien
+  createAlien () {
+    // random x location generator
+    const alienXLocation = Math.floor(Math.random() * 1920) + 1 // this will be a number between 1 and 1920
+    let alienXVelocity = Math.floor(Math.random() * 50) + 1 // this will get a number between 1 and 50
+    alienXVelocity *= Math.round(Math.random()) ? 1 : -1 // this will add minus sign in 50% cases
+    
+    // variable that refrences the alien
+    const anAlien = this.physics.add.sprite(alienXLocation, -100, 'alien')
+    // adding downward velocity to alien
+    anAlien.body.velocity.y = 200
+    anAlien.body.velocity.x = alienXVelocity
+
+    this.alienGroup.add(anAlien)
+  }
+  
   /**
   *This method is the construtor.
   */
@@ -42,6 +59,11 @@ class GameScene extends Phaser.Scene {
     this.load.image('starBackground', 'assets/starBackground.png')
     this.load.image('ship', 'assets/spaceShip.png')
     this.load.image("missile", 'assets/missile.png')
+    // Key for this line of code is "alien"
+    this.load.image('alien', 'assets/alien.png')
+
+    // sound (Load in images for sound)
+    this.load.audio('laser', 'assets/laser1.wav')
   }
 
   /**
@@ -60,6 +82,11 @@ class GameScene extends Phaser.Scene {
 
     // create a group for the missiles
     this.missileGroup = this.physics.add.group()
+
+    // create a group for the aliens
+    this.alienGroup = this.add.group()
+    // create function called "createAlien"
+    this.createAlien()
   }
 
   /**
@@ -108,12 +135,23 @@ class GameScene extends Phaser.Scene {
         const aNewMissile = this.physics.add.sprite(this.ship.x, this.ship.y, 'missile')
         // add it to the group 
         this.missileGroup.add(aNewMissile)
+        this.sound.play('laser')
       }
     }
     // an if statement for when the sapce bar is up
     if (keySpaceObj.isUp === true ) {
       this.fireMissile = false 
     }
+
+    // function for each item, missile movement
+    this.missileGroup.children.each(function (item) {
+      item.y = item.y - 15
+      // Destroy the missiles when they go out of screen to preserve memory
+      if (item.y < 0) {
+        // Method destroyed is provided to us from phaser 3
+        item.destroy()
+      }
+    })
   }
 }
 
