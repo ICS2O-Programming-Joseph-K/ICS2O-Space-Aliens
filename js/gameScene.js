@@ -40,6 +40,15 @@ class GameScene extends Phaser.Scene {
 
     // Variable to let user only fire a missile one at a time
     this.fireMissile = false 
+
+    // Variable to keep track of score
+    this.score = 0
+    this.scoreText = null
+    this.scoreTextStyle = { font: '65px Arial', fill: '#ffffff', align: 'center '}
+
+    // Variable for death | Game Over
+    this.gameOverText = null
+    this.gameOverTextStyle = { font: '65px Arial', fill: '#ff0000', align: 'center' }
   }
 
   // Initialize, gets the scene up and running
@@ -62,8 +71,9 @@ class GameScene extends Phaser.Scene {
     // Key for this line of code is "alien"
     this.load.image('alien', 'assets/alien.png')
 
-    // sound (Load in images for sound)
+    // sounds (Load in sound)
     this.load.audio('laser', 'assets/laser1.wav')
+    this.load.audio('explosion', 'assets/barrelExploding.wav')
   }
 
   /**
@@ -77,6 +87,9 @@ class GameScene extends Phaser.Scene {
     this.background = this.add.image(0, 0, 'starBackground').setScale(2.0)
     this.background.setOrigin(0.0)
 
+    // Show score on screen
+    this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
+
     // Property/module called physics for the movement of spaceship (helps with collision detection)
     this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship')
 
@@ -87,6 +100,32 @@ class GameScene extends Phaser.Scene {
     this.alienGroup = this.add.group()
     // create function called "createAlien"
     this.createAlien()
+
+    // Collisions between missiles and aliens
+    this.physics.add.collider(this.missileGroup, this.alienGroup, function (missileCollide, alienCollide) {
+      // function written here | whenever the code b4 function happens, function will happen
+      alienCollide.destroy()
+      missileCollide.destroy()
+      // Sound when alien gets hit
+      this.sound.play('explosion')
+      // Update score when alien gets hit by missile
+      this.score = this.score + 1
+      this.scoreText.setText('Score: ' + this.score.toString())
+      // Create two more alien when one id destroyed
+      this.createAlien()
+      this.createAlien()
+    }.bind(this))
+
+    // Game over Scene, when Alien hits User's spaceship
+    this.physics.add.collider(this.ship, thisalienGroup, function (shipCollide, alienCollide) {
+      this.sound.play('bomb')
+      this.physics.pause()
+      alienCollide.destroy()
+      shipCollide.destroy()
+      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
+      this.gameOverText.setInteractive({ useHandCursor: true })
+      this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
+    }.bind(this))
   }
 
   /**
