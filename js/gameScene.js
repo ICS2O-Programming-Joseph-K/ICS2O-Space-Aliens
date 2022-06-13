@@ -148,7 +148,7 @@ class GameScene extends Phaser.Scene {
       // Update score when meteor gets hit by missile
       this.score = this.score + 5
       this.scoreText.setText('Score: ' + this.score.toString())
-      // Create two more alien when one id destroyed
+      // Create two more alien when one is destroyed
       this.createMeteor()
       this.createMeteor()
     }.bind(this))
@@ -158,6 +158,17 @@ class GameScene extends Phaser.Scene {
       this.sound.play('bomb')
       this.physics.pause()
       alienCollide.destroy()
+      shipCollide.destroy()
+      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
+      this.gameOverText.setInteractive({ useHandCursor: true })
+      this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
+    }.bind(this))
+
+    // Game over scene, when Meteor hits user's spaceship
+    this.physics.add.collider(this.ship, this.meteorGroup, function (shipCollide, meteorCollide) {
+      this.sound.play('bomb')
+      this.physics.pause()
+      meteorCollide.destroy()
       shipCollide.destroy()
       this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
       this.gameOverText.setInteractive({ useHandCursor: true })
