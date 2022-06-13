@@ -62,4 +62,4 @@ game.scene.add("gameScene", gameScene)
 
 
 // start title - game starts at splashScene
-game.scene.start("splashScene")
+game.scene.start("gameScene")

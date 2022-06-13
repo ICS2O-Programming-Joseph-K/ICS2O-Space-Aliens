@@ -24,7 +24,7 @@ class GameScene extends Phaser.Scene {
 
     this.alienGroup.add(anAlien)
   }
-
+/**
   // create an meteor 
   createMeteor () {
   // random x location generator
@@ -40,6 +40,7 @@ class GameScene extends Phaser.Scene {
 
   this.meteorGroup.add(anMeteor)
   }
+*/
   
   /**
   *This method is the construtor.
@@ -86,8 +87,9 @@ class GameScene extends Phaser.Scene {
     this.load.image("missile", 'assets/missile.png')
     // Key for this line of code is "alien"
     this.load.image('alien', 'assets/alien.png')
+    /**
     this.load.image('meteor', 'assets/Meteor.png')
-
+*/
     // sounds (Load in sound)
     this.load.audio('laser', 'assets/laser1.wav')
     this.load.audio('explosion', 'assets/barrelExploding.wav')
@@ -117,12 +119,12 @@ class GameScene extends Phaser.Scene {
     this.alienGroup = this.add.group()
     // create function called "createAlien"
     this.createAlien()
-
+/**
     // ceate a group for the meteors
     this.meteorGroup = this.add.group()
     // create function called "createMeteor"
     this.createMeteor()
-
+*/
     // Collisions between missiles and aliens
     this.physics.add.collider(this.missileGroup, this.alienGroup, function (missileCollide, alienCollide) {
       // function written here | whenever the code b4 function happens, function will happen
@@ -137,7 +139,7 @@ class GameScene extends Phaser.Scene {
       this.createAlien()
       this.createAlien()
     }.bind(this))
-
+/**
     // Collisions between missiles and meteors
     this.physics.add.collider(this.missileGroup, this.meteorGroup, function (missileCollide, meteorCollide) {
       // function written here | whenever the code b4 function happens, function will happen
@@ -152,7 +154,7 @@ class GameScene extends Phaser.Scene {
       this.createMeteor()
       this.createMeteor()
     }.bind(this))
-
+*/
     // Game over Scene, when Alien hits User's spaceship
     this.physics.add.collider(this.ship, this.alienGroup, function (shipCollide, alienCollide) {
       this.sound.play('bomb')
@@ -163,7 +165,7 @@ class GameScene extends Phaser.Scene {
       this.gameOverText.setInteractive({ useHandCursor: true })
       this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
     }.bind(this))
-
+/**
     // Game over scene, when Meteor hits user's spaceship
     this.physics.add.collider(this.ship, this.meteorGroup, function (shipCollide, meteorCollide) {
       this.sound.play('bomb')
@@ -174,7 +176,9 @@ class GameScene extends Phaser.Scene {
       this.gameOverText.setInteractive({ useHandCursor: true })
       this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
     }.bind(this))
+*/
   }
+
 
   /**
   * Should be overridden by your own scenes. 
