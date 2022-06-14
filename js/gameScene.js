@@ -35,7 +35,7 @@ class GameScene extends Phaser.Scene {
   // variable that refrences the meteor
   const anMeteor = this.physics.add.sprite(meteorXLocation, -100, 'meteor')
   // adding downward velocity to meteor
-  anMeteor.body.velocity.y = 200
+  anMeteor.body.velocity.y = 500
   anMeteor.body.velocity.x = meteorXVelocity
 
   this.meteorGroup.add(anMeteor)
@@ -151,7 +151,6 @@ class GameScene extends Phaser.Scene {
       this.scoreText.setText('Score: ' + this.score.toString())
       // Create two more alien when one is destroyed
       this.createMeteor()
-      this.createMeteor()
     }.bind(this))
 
     // Game over Scene, when Alien hits User's spaceship
@@ -241,11 +240,22 @@ class GameScene extends Phaser.Scene {
       }
     })
 
-      this.alienGroup.children.each(function (item) {
+    // Code to make aliens that enter the bottom void to warp to the top || This code can apply to warp spaceship
+    this.alienGroup.children.each(function (item) {
       if(item.y > 1080) {
         item.y = 0
         const alienXCoordinate = Math.floor(Math.random() * 1920) + 1
         item.x = alienXCoordinate
+      }
+    })
+
+    // Code to make meteors that enter the bottom void to warp to the top
+    this.meteorGroup.children.each(function (item2){
+      if(item2.y > 1080) {
+        item2.y = 0
+        const meteorXCoordinate = Math.floor(Math.random() * 1920 + 1)
+
+        item2.x = meteorXCoordinate
       }
     })
   }
