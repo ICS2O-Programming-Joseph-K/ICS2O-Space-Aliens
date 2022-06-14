@@ -37,7 +37,7 @@ const config = {
     default: 'arcade',
     arcade: {
       // creates bounding boxes (collision boxes that sends messages to physics module/property | false = invisible)
-      debug: false,
+      debug: true,
     },
   },
   // set background color (kept at this color to fit logo)
@@ -62,4 +62,4 @@ game.scene.add("gameScene", gameScene)
 
 
 // start title - game starts at splashScene
-game.scene.start("gameScene")
+game.scene.start("splashScene")
