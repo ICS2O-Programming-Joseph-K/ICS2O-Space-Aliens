@@ -19,6 +19,8 @@ class MenuScene extends Phaser.Scene {
     this.menuSceneBackgroundImage = null
     // Creating a button | similar to adding in an image
     this.startButton = null
+    // Creating a button for tutorial 
+    this.tutorialButton = null
   }
 
   // Initialize, gets the scene up and running
@@ -37,6 +39,9 @@ class MenuScene extends Phaser.Scene {
     this.load.image('menuSceneBackground', 'assets/aliens_screen_image2.jpg')
     // Load in the image that is going to be the button
     this.load.image('startButton', 'assets/start.png')
+
+    // Load i nthe image that is going to be tutorial button
+    this.load.image('tutorialButton', 'assets/tutorial.png')
   }
 
   /**
@@ -56,7 +61,15 @@ class MenuScene extends Phaser.Scene {
     this.startButton.setInteractive({ useHandCursor: true })
     // When the person clicks button (pointerdown) ---> function call to happen
     this.startButton.on('pointerdown', () => this.clickButton())
-  }
+
+
+  // Add in the tutorial button as a sprite, centering it however
+  this.tutorialButton = this.add.sprite(1920 / 2, (1080 / 2) + 300, 'tutorialButton')
+    // Making the button interactive
+    this.tutorialButton.setInteractive({ useHandCursor: true })
+    // When the person clicks button (pointerdown) ---> function call to happen
+    this.tutorialButton.on('pointerdown', () => this.clickButton1())
+    }
 
   /**
   * Should be overridden by your own scenes. 
@@ -73,6 +86,11 @@ class MenuScene extends Phaser.Scene {
     // brings user to gameScene on click
     this.scene.start('gameScene')
   }
+    // code for the tutorialButton function
+    clickButton1 () {
+      //brings user to the tutorialScene on click
+      this.scene.start('tutorialScene')
+    }
 }
 
 // Variable name SplashScene 
