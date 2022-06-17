@@ -146,7 +146,7 @@ class GameScene extends Phaser.Scene {
       followOffset: { y: this.ship.height * 0.1 }
     })
       
-          
+      
 
     // create a group for the aliens
     this.alienGroup = this.add.group()

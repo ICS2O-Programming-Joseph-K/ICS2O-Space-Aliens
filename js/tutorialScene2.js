@@ -107,7 +107,7 @@ class TutorialScene2 extends Phaser.Scene {
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
 
     // Property/module called physics for the movement of spaceship (helps with collision detection)
-    this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship')
+    this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship').setScale(0.3)
 
     // create a group for the missiles
     this.missileGroup = this.physics.add.group()
@@ -125,7 +125,7 @@ class TutorialScene2 extends Phaser.Scene {
       // Lock onto the ship - destroy smoke later in code
       follow: this.ship,
 
-      followOffset: { y: this.ship.height * 0.5 }
+      followOffset: { y: this.ship.height * 0.1 }
     })
 
     // create a group for the aliens
