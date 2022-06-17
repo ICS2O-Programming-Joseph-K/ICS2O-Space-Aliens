@@ -334,6 +334,27 @@ class GameScene extends Phaser.Scene {
         item2.x = meteorXCoordinate
       }
     })
+
+    // Code to make meteors that enter the side void to warp to     the top
+    this.meteorGroup.children.each(function (item2){
+      if(item2.x > 1920) {
+        item2.x = 0
+        const meteorXCoordinate = Math.floor(Math.random() * 1920 + 1)
+
+        item2.x = meteorXCoordinate
+      }
+    })
+
+    // Code to make aliens that enter the side void to warp to     the top
+    this.alienGroup.children.each(function (item){
+      if(item.x > 1920) {
+        item.x = 0
+        const meteorXCoordinate = Math.floor(Math.random() * 1920 + 1)
+
+        item.x = meteorXCoordinate
+      }
+    })
+    
   }
 }
 
