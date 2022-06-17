@@ -77,11 +77,11 @@ class TutorialScene2 extends Phaser.Scene {
     this.load.image('smoke', 'assets1/whitePuff00.png')
 
     // sounds (Load in sound)
-    this.load.audio('laser', 'assets/laser1.wav')
-    this.load.audio('explosion', 'assets/barrelExploding.wav')
-    this.load.audio('bomb', 'assets/bomb.wav')
+    this.load.audio('laser', 'audio/Warp.wav')
+    this.load.audio('explosion', 'audio/Explosion.wav')
     this.load.audio('Ambient', 'audio/Ambient.mp3')
     this.load.audio('click', 'audio.click.wav')
+    this.load.audio('scream', 'audio/Zombie.wav')
 
     // Load in the image that is going to be next button
     this.load.image('nextButton', 'assets/Next.png')
@@ -139,18 +139,18 @@ class TutorialScene2 extends Phaser.Scene {
       alienCollide.destroy()
       missileCollide.destroy()
       // Sound when alien gets hit
-      this.sound.play('explosion')
+      this.sound.play('scream')
       // Update score when alien gets hit by missile
       this.score = this.score + 1
       this.scoreText.setText('Score: ' + this.score.toString())
-      // Create two more alien when one is destroyed
+      // Create one more alien when one is destroyed
       this.createAlien()
     }.bind(this))
 
     // When Alien hits User's spaceship
     this.physics.add.collider(this.ship, this.alienGroup, function (shipCollide, alienCollide) {
       // stop the music
-      this.sound.play('bomb')
+      this.sound.play('explosion')
       alienCollide.destroy()
     }.bind(this))
     
@@ -191,6 +191,15 @@ class TutorialScene2 extends Phaser.Scene {
     const keyDownObj = this.input.keyboard.addKey('DOWN')
     // create a variable in this local function | Space bar
     const keySpaceObj = this.input.keyboard.addKey('SPACE')
+
+    // Code to make aliens that enter the bottom void to warp to the top || This code can apply to warp spaceship
+    this.alienGroup.children.each(function (item) {
+      if(item.y > 1080) {
+        item.y = 0
+        const alienXCoordinate = Math.floor(Math.random() * 1920) + 1
+        item.x = alienXCoordinate
+      }
+    })
 
     
     // If statement for movement | LEFT KEY
@@ -266,9 +275,9 @@ class TutorialScene2 extends Phaser.Scene {
     this.sound.play('click')
     // brings user to gameScene on click
     this.scene.start('gameScene')
-  }
-
-  // code for the clickButton1 function
+    }
+  
+    // code for the clickButton1 function
   clickButton1 () {
     this.sound.play('click')
     // brings user to gameScene on click

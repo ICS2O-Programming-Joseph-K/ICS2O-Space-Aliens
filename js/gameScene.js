@@ -97,10 +97,11 @@ class GameScene extends Phaser.Scene {
     this.load.image('smoke', 'assets1/whitePuff00.png')
 
     // sounds (Load in sound)
-    this.load.audio('laser', 'assets/laser1.wav')
-    this.load.audio('explosion', 'assets/barrelExploding.wav')
+    this.load.audio('laser', 'audio/Warp.wav')
+    this.load.audio('scream', 'audio/Zombie.wav')
     this.load.audio('bomb', 'assets/bomb.wav')
-    this.load.audio('backgroundmusic', 'audio/backgroundmusic.mp3')
+    this.load.audio('backgroundMUSIC', 'audio/backgroundmusic.mp3')
+    this.load.audio('explosion', 'audio/Explosion.wav')
   }
 
   /**
@@ -115,7 +116,7 @@ class GameScene extends Phaser.Scene {
     this.background.setOrigin(0.0)
 
     // Background music
-    this.sound.play('backgroundmusic')
+    this.sound.play('backgroundMUSIC')
 
     // Show score on screen
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
@@ -124,7 +125,7 @@ class GameScene extends Phaser.Scene {
     this.livesText = this.add.text(10, 100, 'Lives: ' + this.lives.toString(), this.livesTextStyle)
 
     // Property/module called physics for the movement of spaceship (helps with collision detection)
-    this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship')
+    this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship').setScale(0.3)
 
     // create a group for the missiles
     this.missileGroup = this.physics.add.group()
@@ -142,7 +143,7 @@ class GameScene extends Phaser.Scene {
       // Lock onto the ship - destroy smoke later in code
       follow: this.ship,
 
-      followOffset: { y: this.ship.height * 0.5 }
+      followOffset: { y: this.ship.height * 0.1 }
     })
       
           
@@ -163,7 +164,7 @@ class GameScene extends Phaser.Scene {
       alienCollide.destroy()
       missileCollide.destroy()
       // Sound when alien gets hit
-      this.sound.play('explosion')
+      this.sound.play('scream')
       // Update score when alien gets hit by missile
       this.score = this.score + 1
       this.scoreText.setText('Score: ' + this.score.toString())
@@ -190,7 +191,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.ship, this.alienGroup, function (shipCollide, alienCollide) {
       // stop the music
       this.game.sound.stopAll()
-      this.sound.play('bomb')
+      this.sound.play('scream')
       // Update score when alien gets hit by missile
       this.score = 0
       // Update lives when alien gets hit by missile
@@ -210,7 +211,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.ship, this.meteorGroup, function (shipCollide, meteorCollide) {
       // stop the music
       this.game.sound.stopAll()
-      this.sound.play('bomb')
+      this.sound.play('explosion')
       // Update score when alien gets hit by missile
       this.score = 0
       // Update lives when alien gets hit by missile

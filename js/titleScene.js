@@ -17,10 +17,14 @@ class TitleScene extends Phaser.Scene {
 
     this.titleSceneBackgroundImage = null
     // This variable will hold text
-    this.titleSceneText= null
+    this.titleSceneText = null
     // For text styling - goes down to "ceate"
     this.titleSceneTextStyle = { font: '200px Times', fill: '#fde4b9', align: 'center' }
-    
+
+
+    this.titleSceneText1 = null
+    this.titleSceneText1Style = { font: '200px Times', fill: '#fde4b9', align: 'center' }
+
   }
 
   // Initialize, gets the scene up and running
@@ -37,6 +41,9 @@ class TitleScene extends Phaser.Scene {
     console.log('Title Scene')
     // image we are using from assets
     this.load.image('titleSceneBackground', 'assets/menuBackground.gif')
+
+    // load in audio
+    this.load.audio('backgroundmusic', 'audio/CODback.mp3')
   }
 
   /**
@@ -45,12 +52,18 @@ class TitleScene extends Phaser.Scene {
   * @param {object} data - Any data passed via ScenePlugin.add() or ScenePlugin.start().
   */
   create(data) {
+
+    // Play background music
+    this.sound.play('backgroundmusic')
+    
     // since loaded in preload we can load it and show it up on the screen, middle of the scene - scale increases image size by the magnification number 
     this.titleSceneBackgroundImage = this.add.sprite(0,0, 'titleSceneBackground').setScale(2.75)
     this.titleSceneBackgroundImage.x = 1920 / 2
     this.titleSceneBackgroundImage.y = 1080 / 2
     // adding in text to this particular scene - where you want this scene) 
-    this.titleSceneText = this.add.text(1920 / 2, 1080 / 2 + 350, 'Extraterrestrial Invasion', this.titleSceneTextStyle).setOrigin(0.5)
+    this.titleSceneText = this.add.text(1920 / 2, 1080 / 2 + 350, 'Outer Invasion', this.titleSceneTextStyle).setOrigin(0.5)
+
+    this.titleSceneText1 = this.add.text(1920 / 2, 1080 / 2 + 100, '', this.titleSceneTextStyle).setOrigin(0.5)
   }
 
   /**
@@ -62,7 +75,7 @@ class TitleScene extends Phaser.Scene {
   update(time, delta) {
     // pass
     // making it last longer than a frame
-    if (time > 6000) {
+    if (time > 22000) {
       this.scene.switch('menuScene')
     }
   }

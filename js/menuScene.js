@@ -44,7 +44,7 @@ class MenuScene extends Phaser.Scene {
     this.load.image('tutorialButton', 'assets/tutorial.png')
 
     // Sound | Load in sound
-    this.load.audio('backgroundmusic', 'audio/backgroundmusic.mp3')
+    this.load.audio('backgroundMusic', 'audio/backgroundmusic.mp3')
 
     this.load.audio('click', 'audio/click.wav')
   }
@@ -55,6 +55,9 @@ class MenuScene extends Phaser.Scene {
   * @param {object} data - Any data passed via ScenePlugin.add() or ScenePlugin.start().
   */
   create(data) {
+
+
+    
     // grab the image from assets and center it on screen
     this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackground').setScale(3.0)
     this.menuSceneBackgroundImage.x = 1920 / 2
@@ -62,7 +65,7 @@ class MenuScene extends Phaser.Scene {
 
     // Background music | Audio
         // Background music
-    this.sound.play('backgroundmusic')
+    this.sound.play('backgroundMusic')
 
     // Add the start button as a sprite, center slightly below 100 pixels
     this.startButton = this.add.sprite(1920 / 2, (1080 / 2) + 100, 'startButton')
