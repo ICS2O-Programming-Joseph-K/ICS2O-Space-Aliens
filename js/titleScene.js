@@ -36,7 +36,7 @@ class TitleScene extends Phaser.Scene {
   preload() {
     console.log('Title Scene')
     // image we are using from assets
-    this.load.image('titleSceneBackground', 'assets/aliens_screen_image.jpg')
+    this.load.image('titleSceneBackground', 'assets/menuBackground.gif')
   }
 
   /**
@@ -50,7 +50,7 @@ class TitleScene extends Phaser.Scene {
     this.titleSceneBackgroundImage.x = 1920 / 2
     this.titleSceneBackgroundImage.y = 1080 / 2
     // adding in text to this particular scene - where you want this scene) 
-    this.titleSceneText = this.add.text(1920 / 2, 1080 / 2 + 350, 'Space Aliens', this.titleSceneTextStyle).setOrigin(0.5)
+    this.titleSceneText = this.add.text(1920 / 2, 1080 / 2 + 350, 'Extraterrestrial Invasion', this.titleSceneTextStyle).setOrigin(0.5)
   }
 
   /**

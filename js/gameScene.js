@@ -17,9 +17,9 @@ class GameScene extends Phaser.Scene {
     alienXVelocity *= Math.round(Math.random()) ? 1 : -1 // this will add minus sign in 50% cases
     
     // variable that refrences the alien
-    const anAlien = this.physics.add.sprite(alienXLocation, -100, 'alien')
+    const anAlien = this.physics.add.sprite(alienXLocation, -100, 'alien').setScale(5.5)
     // adding downward velocity to alien
-    anAlien.body.velocity.y = 200
+    anAlien.body.velocity.y = 300
     anAlien.body.velocity.x = alienXVelocity
 
     this.alienGroup.add(anAlien)
@@ -33,9 +33,9 @@ class GameScene extends Phaser.Scene {
   meteorXVelocity *= Math.round(Math.random()) ? 1 : -1 // this will add minus sign in 50% cases
     
   // variable that refrences the meteor
-  const anMeteor = this.physics.add.sprite(meteorXLocation, -100, 'meteor')
+  const anMeteor = this.physics.add.sprite(meteorXLocation, -100, 'meteor').setScale(0.5)
   // adding downward velocity to meteor
-  anMeteor.body.velocity.y = 500
+  anMeteor.body.velocity.y = 600
   anMeteor.body.velocity.x = meteorXVelocity
 
   this.meteorGroup.add(anMeteor)
@@ -55,7 +55,7 @@ class GameScene extends Phaser.Scene {
     this.ship = null
 
     // Variable to let user only fire a missile one at a time
-    this.fireMissile = false 
+    this.fireMissile = false
 
     // Variable to keep track of score
     this.score = 0
@@ -63,7 +63,7 @@ class GameScene extends Phaser.Scene {
     this.scoreTextStyle = { font: '65px Arial', fill: '#ffffff', align: 'center '}
 
     // Variable of lives counter
-    this.lives = 3
+    this.lives = 1
     this.livesText = null
     this.livesTextStyle = { font: '65px Arial', fill: '#ffffff', align: 'center '}
 
@@ -86,7 +86,7 @@ class GameScene extends Phaser.Scene {
     console.log('Game Scene')
 
     // Load in the images
-    this.load.image('starBackground', 'assets/starBackground.png')
+    this.load.image('starBackground', 'assets/background.webp')
     this.load.image('ship', 'assets/spaceShip.png')
     this.load.image("missile", 'assets/missile.png')
     // Key for this line of code is "alien"
@@ -100,6 +100,7 @@ class GameScene extends Phaser.Scene {
     this.load.audio('laser', 'assets/laser1.wav')
     this.load.audio('explosion', 'assets/barrelExploding.wav')
     this.load.audio('bomb', 'assets/bomb.wav')
+    this.load.audio('backgroundmusic', 'audio/backgroundmusic.mp3')
   }
 
   /**
@@ -109,12 +110,18 @@ class GameScene extends Phaser.Scene {
   */
   create(data) {
 
-    // Show the image ot the user, center it
+    // Show the image to the user, center it
     this.background = this.add.image(0, 0, 'starBackground').setScale(2.0)
     this.background.setOrigin(0.0)
 
+    // Background music
+    this.sound.play('backgroundmusic')
+
     // Show score on screen
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
+
+    // Show lives on screen
+    this.livesText = this.add.text(10, 100, 'Lives: ' + this.lives.toString(), this.livesTextStyle)
 
     // Property/module called physics for the movement of spaceship (helps with collision detection)
     this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship')
@@ -181,31 +188,43 @@ class GameScene extends Phaser.Scene {
 
     // Game over Scene, when Alien hits User's spaceship
     this.physics.add.collider(this.ship, this.alienGroup, function (shipCollide, alienCollide) {
+      // stop the music
+      this.game.sound.stopAll()
       this.sound.play('bomb')
       // Update score when alien gets hit by missile
       this.score = 0
+      // Update lives when alien gets hit by missile
+      this.lives = this.lives - 1
+      this.livesText.setText('Lives: ' + this.lives.toString())
       this.physics.pause()
       alienCollide.destroy()
       shipCollide.destroy()
       particles.destroy()
-      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
+      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!\nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
       this.gameOverText.setInteractive({ useHandCursor: true })
       this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
+      this.lives = this.lives + 1
     }.bind(this))
 
     // Game over scene, when Meteor hits user's spaceship
     this.physics.add.collider(this.ship, this.meteorGroup, function (shipCollide, meteorCollide) {
+      // stop the music
+      this.game.sound.stopAll()
       this.sound.play('bomb')
       // Update score when alien gets hit by missile
       this.score = 0
+      // Update lives when alien gets hit by missile
+      this.lives = this.lives - 1
+      this.livesText.setText('Lives: ' + this.lives.toString())
       this.physics.pause()
       meteorCollide.destroy()
       shipCollide.destroy()
       particles.destroy()
-      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
+      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!\nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
       this.gameOverText.setInteractive({ useHandCursor: true })
       this.gameOverText.on('pointerdown', () => this.scene.start('gameScene'))
-    }.bind(this))
+      this.lives = this.lives + 1
+    }.bind(this))  
   }
 
   /**
@@ -314,15 +333,6 @@ class GameScene extends Phaser.Scene {
         item2.x = meteorXCoordinate
       }
     })
-    /**
-    this.ship(function (item3) {
-      if(item3.x > 1920) {
-        item3.x = 0
-        const shipXCoordinate = Math.floor(Math.random() * 1920 + 1)
-        item3.y = shipXCoordinate
-      }
-    })
-    */
   }
 }
 

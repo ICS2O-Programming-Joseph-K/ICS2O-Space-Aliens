@@ -36,12 +36,17 @@ class MenuScene extends Phaser.Scene {
   preload() {
     console.log('Menu Scene')
     // Load the image
-    this.load.image('menuSceneBackground', 'assets/aliens_screen_image2.jpg')
+    this.load.image('menuSceneBackground', 'assets/Mars.webp')
     // Load in the image that is going to be the button
     this.load.image('startButton', 'assets/start.png')
 
-    // Load i nthe image that is going to be tutorial button
+    // Load in the image that is going to be tutorial button
     this.load.image('tutorialButton', 'assets/tutorial.png')
+
+    // Sound | Load in sound
+    this.load.audio('backgroundmusic', 'audio/backgroundmusic.mp3')
+
+    this.load.audio('click', 'audio/click.wav')
   }
 
   /**
@@ -51,9 +56,13 @@ class MenuScene extends Phaser.Scene {
   */
   create(data) {
     // grab the image from assets and center it on screen
-    this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackground')
+    this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackground').setScale(3.0)
     this.menuSceneBackgroundImage.x = 1920 / 2
     this.menuSceneBackgroundImage.y = 1080 / 2
+
+    // Background music | Audio
+        // Background music
+    this.sound.play('backgroundmusic')
 
     // Add the start button as a sprite, center slightly below 100 pixels
     this.startButton = this.add.sprite(1920 / 2, (1080 / 2) + 100, 'startButton')
@@ -83,14 +92,17 @@ class MenuScene extends Phaser.Scene {
 
   // code for the clickButton function
   clickButton () {
+    this.sound.play('click')
     // brings user to gameScene on click
     this.scene.start('gameScene')
   }
-    // code for the tutorialButton function
-    clickButton1 () {
-      //brings user to the tutorialScene on click
-      this.scene.start('tutorialScene')
-    }
+  // code for the tutorialButton function
+  clickButton1 () {
+    this.sound.play('click')
+      
+    //brings user to the tutorialScene on click
+    this.scene.start('tutorialScene')
+  }
 }
 
 // Variable name SplashScene 

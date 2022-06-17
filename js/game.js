@@ -19,6 +19,9 @@ import MenuScene from './menuScene.js'
 // import in the js file using the import statement "TutorialScene"
 import TutorialScene from './tutorialScene.js'
 
+// import in the js file using the import statement "TutorialScene2"
+import TutorialScene2 from './tutorialScene2.js'
+
 // import in the js file using the import statement "MenuScene"
 import GameScene from './gameScene.js'
 
@@ -28,6 +31,7 @@ const splashScene = new SplashScene()
 const titleScene = new TitleScene()
 const menuScene = new MenuScene()
 const tutorialScene = new TutorialScene()
+const tutorialScene2 = new TutorialScene2()
 const gameScene = new GameScene()
 
 
@@ -41,7 +45,7 @@ const config = {
     default: 'arcade',
     arcade: {
       // creates bounding boxes (collision boxes that sends messages to physics module/property | false = invisible)
-      debug: true,
+      debug: false,
     },
   },
   // set background color (kept at this color to fit logo)
@@ -63,8 +67,8 @@ game.scene.add("splashScene", splashScene)
 game.scene.add("titleScene", titleScene)
 game.scene.add("menuScene", menuScene)
 game.scene.add("tutorialScene", tutorialScene)
+game.scene.add("tutorialScene2", tutorialScene2)
 game.scene.add("gameScene", gameScene)
 
-
 // start title - game starts at splashScene
-game.scene.start("menuScene")
+game.scene.start("splashScene")

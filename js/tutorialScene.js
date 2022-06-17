@@ -4,43 +4,11 @@
 //
 // Created by: Joseph Kwon
 // Created on: June 2022
-// This is the Game Scene
+// This is the Tutorial Scene
 
 // Expand this particular scene using the code of another user
 class TutorialScene extends Phaser.Scene {
 
-  // ceate an alien
-  createAlien () {
-    // random x location generator
-    const alienXLocation = Math.floor(Math.random() * 1920) + 1 // this will be a number between 1 and 1920
-    let alienXVelocity = Math.floor(Math.random() * 50) + 1 // this will get a number between 1 and 50
-    alienXVelocity *= Math.round(Math.random()) ? 1 : -1 // this will add minus sign in 50% cases
-    
-    // variable that refrences the alien
-    const anAlien = this.physics.add.sprite(alienXLocation, -100, 'alien')
-    // adding downward velocity to alien
-    anAlien.body.velocity.y = 200
-    anAlien.body.velocity.x = alienXVelocity
-
-    this.alienGroup.add(anAlien)
-  }
-
-  // create an meteor 
-  createMeteor () {
-  // random x location generator
-  const meteorXLocation = Math.floor(Math.random() * 1920) + 1 // this will be a number between 1 and 1920
-  let meteorXVelocity = Math.floor(Math.random() * 50) + 1 // this will get a number between 1 and 50
-  meteorXVelocity *= Math.round(Math.random()) ? 1 : -1 // this will add minus sign in 50% cases
-    
-  // variable that refrences the meteor
-  const anMeteor = this.physics.add.sprite(meteorXLocation, -100, 'meteor')
-  // adding downward velocity to meteor
-  anMeteor.body.velocity.y = 500
-  anMeteor.body.velocity.x = meteorXVelocity
-
-  this.meteorGroup.add(anMeteor)
-  }
-  
   /**
   *This method is the construtor.
   */
@@ -62,14 +30,9 @@ class TutorialScene extends Phaser.Scene {
     this.scoreText = null
     this.scoreTextStyle = { font: '65px Arial', fill: '#ffffff', align: 'center '}
 
-    // Variable of lives counter
-    this.lives = 3
-    this.livesText = null
-    this.livesTextStyle = { font: '65px Arial', fill: '#ffffff', align: 'center '}
-
-    // Variable for death | Game Over
-    this.gameOverText = null
-    this.gameOverTextStyle = { font: '65px Arial', fill: '#ff0000', align: 'center' }
+    // Variable for death | tutorial
+    this.tutorialText = null
+    this.tutorialText = { font: '65px Arial', fill: '#ff0000', align: 'center' }
   }
 
   // Initialize, gets the scene up and running
@@ -100,6 +63,12 @@ class TutorialScene extends Phaser.Scene {
     this.load.audio('laser', 'assets/laser1.wav')
     this.load.audio('explosion', 'assets/barrelExploding.wav')
     this.load.audio('bomb', 'assets/bomb.wav')
+    this.load.audio('Ambient', 'audio/Ambient.mp3')
+    this.load.audio('click', 'audio.click.wav')
+
+    // Load in the image that is going to be next button
+    this.load.image('nextButton', 'assets/Next.png')
+    this.load.image('nextButton1', 'assets/BackButton.png')
   }
 
   /**
@@ -109,9 +78,13 @@ class TutorialScene extends Phaser.Scene {
   */
   create(data) {
 
-    // Show the image ot the user, center it
+    // Show the image of the user, center it
     this.background = this.add.image(0, 0, 'starBackground').setScale(2.0)
     this.background.setOrigin(0.0)
+    
+    // Stop any current audio and repkace with ambience 
+    this.game.sound.stopAll()
+    this.sound.play('Ambient')
 
     // Show score on screen
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
@@ -137,75 +110,26 @@ class TutorialScene extends Phaser.Scene {
 
       followOffset: { y: this.ship.height * 0.5 }
     })
-      
-          
 
-    // create a group for the aliens
-    this.alienGroup = this.add.group()
-    // create function called "createAlien"
-    this.createAlien()
+    // Tutorial text
+    this.tutorialText = this.add.text(1920 / 2, 1080 / 4, 'Arrow keys are used for movement.\nSpace bar is used for projectiles.', this.tutorialText).setOrigin(0.5)
 
-    // ceate a group for the meteors
-    this.meteorGroup = this.add.group()
-    // create function called "createMeteor"
-    this.createMeteor()
+    // Add the start button as a sprite, center slightly below 100 pixels
+    this.nextButton = this.add.sprite(1920 / 7, (1080 / 2) + 400, 'nextButton')
+    // Making the button interactive
+    this.nextButton.setInteractive({ useHandCursor: true })
+    // When the person clicks button (pointerdown) ---> function call to happen
+    this.nextButton.on('pointerdown', () => this.clickButton())
+    
+  
 
-    // Collisions between missiles and aliens
-    this.physics.add.collider(this.missileGroup, this.alienGroup, function (missileCollide, alienCollide) {
-      // function written here | whenever the code b4 function happens, function will happen
-      alienCollide.destroy()
-      missileCollide.destroy()
-      // Sound when alien gets hit
-      this.sound.play('explosion')
-      // Update score when alien gets hit by missile
-      this.score = this.score + 1
-      this.scoreText.setText('Score: ' + this.score.toString())
-      // Create two more alien when one is destroyed
-      this.createAlien()
-      this.createAlien()
-    }.bind(this))
-
-    // Collisions between missiles and meteors
-    this.physics.add.collider(this.missileGroup, this.meteorGroup, function (missileCollide, meteorCollide) {
-      // function written here | whenever the code b4 function happens, function will happen
-      meteorCollide.destroy()
-      missileCollide.destroy()
-      // Sound when meteor gets hit
-      this.sound.play('explosion')
-      // Update score when meteor gets hit by missile
-      this.score = this.score + 5
-      this.scoreText.setText('Score: ' + this.score.toString())
-      // Create two more alien when one is destroyed
-      this.createMeteor()
-    }.bind(this))
-
-    // Game over Scene, when Alien hits User's spaceship
-    this.physics.add.collider(this.ship, this.alienGroup, function (shipCollide, alienCollide) {
-      this.sound.play('bomb')
-      // Update score when alien gets hit by missile
-      this.score = 0
-      this.physics.pause()
-      alienCollide.destroy()
-      shipCollide.destroy()
-      particles.destroy()
-      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
-      this.gameOverText.setInteractive({ useHandCursor: true })
-      this.gameOverText.on('pointerdown', () => this.scene.start('tutorialScene'))
-    }.bind(this))
-
-    // Game over scene, when Meteor hits user's spaceship
-    this.physics.add.collider(this.ship, this.meteorGroup, function (shipCollide, meteorCollide) {
-      this.sound.play('bomb')
-      // Update score when alien gets hit by missile
-      this.score = 0
-      this.physics.pause()
-      meteorCollide.destroy()
-      shipCollide.destroy()
-      particles.destroy()
-      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game over!/nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
-      this.gameOverText.setInteractive({ useHandCursor: true })
-      this.gameOverText.on('pointerdown', () => this.scene.start('tutorialScene'))
-    }.bind(this))
+    // Add the start button as a sprite, center slightly below 100 pixels
+    this.nextButton1 = this.add.sprite(1920 / 7, (1080 / 2) + 150, 'nextButton1')
+    // Making the button interactive
+    this.nextButton1.setInteractive({ useHandCursor: true })
+    // When the person clicks button (pointerdown) ---> function call to happen
+    this.nextButton1.on('pointerdown', () => this.clickButton1())
+    
   }
 
   /**
@@ -295,36 +219,21 @@ class TutorialScene extends Phaser.Scene {
         item.destroy()
       }
     })
-
-    // Code to make aliens that enter the bottom void to warp to the top || This code can apply to warp spaceship
-    this.alienGroup.children.each(function (item) {
-      if(item.y > 1080) {
-        item.y = 0
-        const alienXCoordinate = Math.floor(Math.random() * 1920) + 1
-        item.x = alienXCoordinate
-      }
-    })
-
-    // Code to make meteors that enter the bottom void to warp to the top
-    this.meteorGroup.children.each(function (item2){
-      if(item2.y > 1080) {
-        item2.y = 0
-        const meteorXCoordinate = Math.floor(Math.random() * 1920 + 1)
-
-        item2.x = meteorXCoordinate
-      }
-    })
-    /**
-    this.ship(function (item3) {
-      if(item3.x > 1920) {
-        item3.x = 0
-        const shipXCoordinate = Math.floor(Math.random() * 1920 + 1)
-        item3.y = shipXCoordinate
-      }
-    })
-    */
+  }
+  // code for the clickButton function
+  clickButton () {
+    this.sound.play('click')
+    // brings user to gameScene on click
+    this.scene.start('tutorialScene2')
+    }
+  
+    // code for the clickButton1 function
+  clickButton1 () {
+    this.sound.play('click')
+    // brings user to gameScene on click
+    this.scene.start('menuScene')
   }
 }
 
 // Variable name TutorialScene 
-export default TutorialScene
+export default TutorialScene 
