@@ -45,7 +45,7 @@ const config = {
     default: 'arcade',
     arcade: {
       // creates bounding boxes (collision boxes that sends messages to physics module/property | false = invisible)
-      debug: true,
+      debug: false,
     },
   },
   // set background color (kept at this color to fit logo)
