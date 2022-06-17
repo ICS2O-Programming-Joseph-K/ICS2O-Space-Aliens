@@ -71,4 +71,4 @@ game.scene.add("tutorialScene2", tutorialScene2)
 game.scene.add("gameScene", gameScene)
 
 // start title - game starts at splashScene
-game.scene.start("gameScene")
+game.scene.start("splashScene")
